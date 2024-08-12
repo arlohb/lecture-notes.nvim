@@ -91,6 +91,8 @@ function M.download_linked()
             outfile = vim.fn.getcwd() .. "/" .. outfile
         end
         line = line:gsub("%b()", "(file://" .. outfile .. ")")
+        -- TODO: If the line has moved while downloading, this is no longer correct
+        -- Line should be stored and set with vim.api.nvim_buf_set_lines
         vim.api.nvim_set_current_line(line)
     end))
 end

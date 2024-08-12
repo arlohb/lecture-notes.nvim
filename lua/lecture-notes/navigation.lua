@@ -1,3 +1,5 @@
+-- TODO: Clean up this file
+
 local M = {}
 
 local files = require("lecture-notes.files")

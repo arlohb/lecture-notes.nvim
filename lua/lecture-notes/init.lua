@@ -1,3 +1,5 @@
+-- TODO: Add progress bars
+
 local M = {}
 
 local downloader = require("lecture-notes.downloader")
