@@ -1,5 +1,7 @@
 local M = {}
 
+---Open a file.
+---@param path string
 function M.open(path)
     -- Expand the wildcard
     path = vim.fn.expand(path)
@@ -8,12 +10,16 @@ function M.open(path)
     vim.cmd("e " .. path)
 end
 
+---Get the currently open file.
+---@return string
 function M.current_file()
     return vim.fn.expand("%")
 end
 
+---Get the currently open folder.
 ---This isn't the working directory,
 ---It's the folder containing the open file.
+---@return string
 function M.current_folder()
     -- Get the current file
     local path = M.current_file()

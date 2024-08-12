@@ -2,6 +2,7 @@ local M = {}
 
 local files = require("lecture-notes.files")
 
+---Open the vault as declared in `Config.vault_location`.
 function M.open_vault()
     vim.cmd("e ~/Nextcloud/Vault/Scratch.md")
     require("telescope.builtin").find_files({
@@ -9,6 +10,8 @@ function M.open_vault()
     )
 end
 
+---Open the previous lecture.
+---Assumes the lecture number is the 2nd 'word' in the filename.
 function M.prev_lecture()
     -- Get the current file
     local path = files.current_file()
@@ -24,6 +27,8 @@ function M.prev_lecture()
     files.open(path .. "*")
 end
 
+---Open the next lecture.
+---Assumes the lecture number is the 2nd 'word' in the filename.
 function M.next_lecture()
     -- Get the current file
     local path = files.current_file()
@@ -39,6 +44,9 @@ function M.next_lecture()
     files.open(path .. "*")
 end
 
+---Open the parent module of a lecture.
+---Assumes the module code is the 1st 'word' in the filename.
+---And that the module page is 'xxxx 00.md'.
 function M.parent_module()
     -- Get the current file
     local path = files.current_file()

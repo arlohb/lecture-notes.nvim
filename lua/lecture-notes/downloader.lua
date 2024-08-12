@@ -2,10 +2,11 @@ local M = {}
 
 local files = require("lecture-notes.files")
 
----Calls callback with true on success and false on failure
----@param url string
----@param folder string
----@param callback function (status: boolean, outfile: string)
+---Attempts to download a file from the given URL.
+---Doesn't prompt for session token, just tries to download once.
+---@param url string URL of the Moodle file.
+---@param folder string Folder to save to.
+---@param callback function (success: boolean, outfile: string)
 function M.try_download(url, folder, callback)
     local config = require("lecture-notes.config").config
 
@@ -27,9 +28,10 @@ function M.try_download(url, folder, callback)
     )
 end
 
----Will try again after prompting for a session token if the first try failed
----@param url string
----@param folder string
+---Downloads a file from the given URL.
+---If the first try fails, prompt for session token and try again.
+---@param url string URL of the Moodle file.
+---@param folder string Folder to save to.
 ---@param callback function (outfile: string)
 function M.download_url(url, folder, callback)
     local config = require("lecture-notes.config").config
@@ -57,6 +59,10 @@ function M.download_url(url, folder, callback)
     end)
 end
 
+---Downloads a file.
+---Gets the URL from a prompt.
+---Uses the current folder for output.
+---May prompt for a session token.
 function M.download()
     vim.ui.input({ prompt = "URL" }, function(url)
         require("lecture-notes.downloader").download_url(
@@ -67,6 +73,10 @@ function M.download()
     end)
 end
 
+---Download the currently hovered linked file.
+---Put the file in ./Files.
+---May prompt for a session token.
+---Also changes the link to the new local copy.
 function M.download_linked()
     local line = vim.api.nvim_get_current_line()
     local url = line:match("%b()"):sub(2, -2)
