@@ -6,7 +6,8 @@ local files = require("lecture-notes.files")
 
 ---Open the vault as declared in `Config.vault_location`.
 function M.open_vault()
-    vim.cmd("e ~/Nextcloud/Vault/Scratch.md")
+    local config = require("lecture-notes.config").config
+    files.open(config.vault_location)
     require("telescope.builtin").find_files({
         find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}
     )

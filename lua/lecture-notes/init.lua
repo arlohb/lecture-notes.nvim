@@ -15,10 +15,7 @@ M.prev_lecture = navigation.prev_lecture
 M.next_lecture = navigation.next_lecture
 M.parent_module = navigation.parent_module
 
----@param config Config
-function M.setup(config)
-    require("lecture-notes.config").setup(config)
-end
+M.setup = require("lecture-notes.config").setup
 
 return M
 

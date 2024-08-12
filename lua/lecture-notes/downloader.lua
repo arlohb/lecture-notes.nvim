@@ -22,8 +22,10 @@ function M.try_download(url, folder, callback)
         },
         {},
         function(output)
+            local success = output.code == 0
+            -- Read the downloaded file name from moodle_simple_dl
             local outfile = output.stdout
-            callback(output.code == 0, outfile)
+            callback(success, outfile)
         end
     )
 end
