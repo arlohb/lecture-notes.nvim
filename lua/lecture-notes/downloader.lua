@@ -81,6 +81,8 @@ end
 ---Also changes the link to the new local copy.
 function M.download_linked()
     local line = vim.api.nvim_get_current_line()
+    local line_num = vim.api.nvim_win_get_cursor(0)[1]
+    local buf = vim.api.nvim_get_current_buf()
     local url = line:match("%b()"):sub(2, -2)
 
     M.download_url(url, files.current_folder() .. "/Files", vim.schedule_wrap(function(outfile)
@@ -93,9 +95,12 @@ function M.download_linked()
             outfile = vim.fn.getcwd() .. "/" .. outfile
         end
         line = line:gsub("%b()", "(file://" .. outfile .. ")")
-        -- TODO: If the line has moved while downloading, this is no longer correct
-        -- Line should be stored and set with vim.api.nvim_buf_set_lines
-        vim.api.nvim_set_current_line(line)
+
+        vim.api.nvim_buf_set_lines(
+            buf,
+            line_num - 1, line_num, false,
+            { line }
+        )
     end))
 end
 
