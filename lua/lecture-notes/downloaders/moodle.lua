@@ -1,7 +1,7 @@
 
 ---@type Select
-local function select(_)
-    return true
+local function select(url)
+    return url:find("https://moodle.", 1, true) == 1
 end
 
 ---Attempts to download a file from the given URL.
@@ -49,7 +49,7 @@ local function download(url, folder, callback)
 
                 try_download(url, folder, function(outfile2)
                     if outfile2 == nil then
-                        vim.notify("Failed to download file", vim.log.levels.ERROR)
+                        callback(nil, "Moodle : Failed to download file")
                         return
                     end
 

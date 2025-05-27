@@ -1,7 +1,7 @@
 local M = {}
 
 local files = require("lecture-notes.files")
-local moodle = require("lecture-notes.downloaders.moodle").downloader
+local download = require("lecture-notes.downloaders.downloader").download
 
 ---Downloads a file.
 ---Gets the URL from a prompt.
@@ -9,7 +9,7 @@ local moodle = require("lecture-notes.downloaders.moodle").downloader
 ---May prompt for a session token.
 function M.download()
     vim.ui.input({ prompt = "URL" }, function(url)
-        moodle.download(
+        download(
             url,
             files.current_folder(),
             function(_) end
@@ -27,7 +27,17 @@ function M.download_linked()
     local buf = vim.api.nvim_get_current_buf()
     local url = line:match("%b()"):sub(2, -2)
 
-    moodle.download(url, files.current_folder() .. "/Files", vim.schedule_wrap(function(outfile)
+    download(url, files.current_folder() .. "/Files", vim.schedule_wrap(function(outfile, error)
+        if outfile == nil then
+            if error ~= nil then
+                vim.notify("Failed : " .. error, vim.log.levels.ERROR)
+            else
+                vim.notify("Failed, no error given", vim.log.levels.ERROR)
+            end
+
+            return
+        end
+
         -- Remove ./ at start
         outfile = outfile:gsub("^%./", "")
         -- Remove newline
