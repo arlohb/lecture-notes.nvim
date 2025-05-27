@@ -27,14 +27,8 @@ function M.download_linked()
     local buf = vim.api.nvim_get_current_buf()
     local url = line:match("%b()"):sub(2, -2)
 
-    download(url, files.current_folder() .. "/Files", vim.schedule_wrap(function(outfile, error)
+    download(url, files.current_folder() .. "/Files", vim.schedule_wrap(function(outfile, _)
         if outfile == nil then
-            if error ~= nil then
-                vim.notify("Failed : " .. error, vim.log.levels.ERROR)
-            else
-                vim.notify("Failed, no error given", vim.log.levels.ERROR)
-            end
-
             return
         end
 

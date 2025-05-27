@@ -14,14 +14,32 @@ local M = {}
 
 ---@type [Downloader]
 M.downloaders = {
-    require("lecture-notes.downloaders.moodle").downloader
+    require("lecture-notes.downloaders.moodle").downloader,
+    require("lecture-notes.downloaders.youtube").downloader,
 }
 
 ---@type Download
 function M.download(url, folder, callback)
     for _, downloader in ipairs(M.downloaders) do
         if downloader.select(url) then
-            downloader.download(url, folder, callback)
+            vim.notify("Started download", vim.log.levels.INFO)
+
+            downloader.download(url, folder, function(outpath, error)
+                if outpath ~= nil then
+                    vim.notify("Download successful", vim.log.levels.INFO)
+
+                    callback(outpath, error)
+                else
+                    if error ~= nil then
+                        vim.notify("Failed : " .. error, vim.log.levels.ERROR)
+                    else
+                        vim.notify("Failed, no error given", vim.log.levels.ERROR)
+                    end
+
+                    callback(outpath, error)
+                end
+            end)
+
             return
         end
     end
